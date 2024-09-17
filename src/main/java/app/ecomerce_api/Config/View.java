@@ -1,4 +1,4 @@
-package app.ecomerce_api.Config;
+package app.ecomerce_api.config;
 
 public class View {
     public static class Public {}
