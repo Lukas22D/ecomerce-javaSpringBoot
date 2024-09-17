@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import app.ecomerce_api.Config.View;
+import app.ecomerce_api.config.View;
 import app.ecomerce_api.controller.dto_controller.Response200;
 import app.ecomerce_api.model.Item;
 import app.ecomerce_api.service.ItemService;

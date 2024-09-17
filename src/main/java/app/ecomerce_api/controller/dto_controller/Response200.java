@@ -2,7 +2,7 @@ package app.ecomerce_api.controller.dto_controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import app.ecomerce_api.Config.View;
+import app.ecomerce_api.config.View;
 
 public class Response200 {
 
