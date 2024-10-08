@@ -12,6 +12,8 @@ public interface ItemService {
     public Item updateItem(Item item);
 
     public Item deleteItemById(Long id);
+
+    public Item getItemById(Long id);
     
     
 }

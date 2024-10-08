@@ -23,7 +23,7 @@ public class ItemServiceCore implements ItemService {
     }
 
     @Cacheable(value = "item", key = "#id")
-    protected Item getItemById(Long id) {
+    public Item getItemById(Long id) {
         return itemRepository.findById(id).orElseThrow( () -> new EntityNotFoundException("Item not found"));
     }
 
