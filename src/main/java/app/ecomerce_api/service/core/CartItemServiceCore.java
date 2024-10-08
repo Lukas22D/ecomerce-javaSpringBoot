@@ -1,42 +1,44 @@
 package app.ecomerce_api.service.core;
 
-import org.hibernate.Hibernate;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
-import jakarta.persistence.EntityNotFoundException;
 
 import app.ecomerce_api.service.CartItemService;
 import app.ecomerce_api.model.CartItem;
 import app.ecomerce_api.dto_global.CartItemRequest;
 import app.ecomerce_api.model.Cart;
 import app.ecomerce_api.repository.CartItemRepository;
-import app.ecomerce_api.repository.ItemRepository;
-import app.ecomerce_api.repository.UserRepository;
+
 
 @Service
 public class CartItemServiceCore implements CartItemService {
 
-    @Autowired
-    private CartItemRepository cartItemRepository;
-    @Autowired
-    private UserRepository userRepository;
+    final private CartServiceCore cartServiceCore;
+    final private CartItemRepository cartItemRepository;
+    final private ItemServiceCore itemServiceCore;
 
-    @Autowired
-    private ItemRepository itemRepository;
+    public CartItemServiceCore(
+            CartServiceCore cartServiceCore,
+            CartItemRepository cartItemRepository,
+            ItemServiceCore itemServiceCore
+      ) {
+        this.cartServiceCore = cartServiceCore;
+        this.itemServiceCore = itemServiceCore;
+        this.cartItemRepository = cartItemRepository;
+    }
 
     @Override
+    @CachePut(value = "cart", key = "#reqItemCart.userId()")
     public Cart addItemToCart(CartItemRequest reqItemCart) {
-        var user = userRepository.findById(reqItemCart.getUserId()).orElseThrow( () -> new EntityNotFoundException("User not found"));
-        var cart = user.getShoppingCart();
-        var item = itemRepository.findById(reqItemCart.getProductId()).orElseThrow( () -> new EntityNotFoundException("Item not found"));
-        Hibernate.initialize(cart.getCartItems());
-        CartItem cartItem = new CartItem();
-        cartItem.setCart(cart);
-        cartItem.setItem(item);
-        cartItem.setQuantidadeSelecionada(reqItemCart.getQuantity());
-        cartItemRepository.save(cartItem);
-        return cart;
-        
+        // Buscar o carrinho do usuário
+        var cart = cartServiceCore.getCartById(reqItemCart.userId());
+        // Buscar o item a ser adicionado
+        var item = itemServiceCore.getItemById(reqItemCart.productId());
+        // Criar um novo CartItem e definir os relacionamentos
+        CartItem cartItem = new CartItem(cart, item, reqItemCart.quantity());
+        cartItem = cartItemRepository.save(cartItem);
+        cart.addItem(cartItem);
+        return cartServiceCore.saveCart(cart);
     }
-    
+
 }

@@ -1,6 +1,8 @@
 package app.ecomerce_api.model;
 
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -13,7 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity(name = "cart_item")
-public class CartItem {
+public class CartItem implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,15 @@ public class CartItem {
 
     @JsonView({View.UserWithCart.class, View.CartView.class})
     private Integer quantidadeSelecionada;
+
+    public CartItem() {
+    }
+
+    public CartItem(Cart Cart, Item item, Integer quantidadeSelecionada) {
+        this.cart = Cart;
+        this.item = item;
+        this.quantidadeSelecionada = quantidadeSelecionada;
+    }
 
     public Long getId() {
         return id;

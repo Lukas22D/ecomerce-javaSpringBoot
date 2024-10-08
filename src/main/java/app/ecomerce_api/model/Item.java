@@ -1,8 +1,8 @@
 package app.ecomerce_api.model;
 
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonView;
 
 import app.ecomerce_api.config.View;
@@ -10,10 +10,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+
 
 @Entity(name = "item_produto")
-public class Item {
+public class Item implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +32,8 @@ public class Item {
     @JsonView({View.ItemView.class})
     private Integer quantidadeDisponivel;
 
-    @OneToMany(mappedBy = "item")
-    @JsonIgnore
-    private List<CartItem> cartItems;
 
-    // Getters e Setters
-
+   
     public Long getId() {
         return id;
     }
@@ -77,11 +74,5 @@ public class Item {
         this.quantidadeDisponivel = quantidadeDisponivel;
     }
 
-    public List<CartItem> getCartItems() {
-        return cartItems;
-    }
 
-    public void setCartItems(List<CartItem> cartItems) {
-        this.cartItems = cartItems;
-    }
 }

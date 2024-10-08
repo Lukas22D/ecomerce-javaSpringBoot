@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import app.ecomerce_api.service.UserService;
 import app.ecomerce_api.config.View;
 import app.ecomerce_api.controller.dto_controller.Response200;
+import app.ecomerce_api.controller.dto_controller.UserCreateDto;
 import app.ecomerce_api.model.User;
 
 
@@ -30,7 +31,7 @@ public class UserController {
 
     @PostMapping("/register")
     @JsonView(View.UserWithCart.class)
-    public ResponseEntity<Response200> registerUser( @RequestBody User user) {
+    public ResponseEntity<Response200> registerUser( @RequestBody UserCreateDto user) {
         User userSave = userService.saveUser(user);
         return new ResponseEntity<>(new Response200().setResponse200("User registered", HttpStatus.OK.value(), userSave), HttpStatus.OK);
     }

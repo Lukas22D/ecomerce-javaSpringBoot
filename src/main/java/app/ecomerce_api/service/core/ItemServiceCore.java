@@ -1,6 +1,7 @@
 package app.ecomerce_api.service.core;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class ItemServiceCore implements ItemService {
         return itemRepository.save(item);
     }
 
-    @Override
-    public Item getItemById(Long id) {
+    @Cacheable(value = "item", key = "#id")
+    protected Item getItemById(Long id) {
         return itemRepository.findById(id).orElseThrow( () -> new EntityNotFoundException("Item not found"));
     }
 

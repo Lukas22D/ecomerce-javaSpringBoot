@@ -13,9 +13,13 @@ import app.ecomerce_api.repository.CartItemRepository;
 import app.ecomerce_api.repository.ItemRepository;
 import app.ecomerce_api.repository.UserRepository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.hibernate.Hibernate;
 
-@SpringBootTest // garante que a transação seja revertida após o teste, mantendo o banco de dados limpo.
+@SpringBootTest // garante que a transação seja revertida após o teste, mantendo o banco de
+                // dados limpo.
 public class UserServiceTest {
 
     @Autowired
@@ -28,7 +32,7 @@ public class UserServiceTest {
     private ItemRepository itemRepository;
 
     @Autowired
-    private CartItemRepository cartItemRepository;  // Novo repositório para CartItem
+    private CartItemRepository cartItemRepository; // Novo repositório para CartItem
 
     @Test
     public void create_user_and_cart() {
@@ -38,14 +42,12 @@ public class UserServiceTest {
         user.setLogin("testuser@example.com");
         user.setPassword("password123");
 
-        // Criação de um novo carrinho de compras
-        Cart cart = new Cart();
-
-        // Estabelece o relacionamento bidirecional
-        user.setShoppingCart(cart); // Associa o carrinho ao usuário
-
         // Salva o usuário (e automaticamente o carrinho através do cascade)
         userRepository.save(user);
+
+        // Verifique que o usuário e o carrinho foram salvos corretamente
+        assertNotNull(user.getId());
+        assertNotNull(user.getShoppingCart());
     }
 
     @Test
@@ -70,7 +72,7 @@ public class UserServiceTest {
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setItem(itemSalvo2);
-        cartItem.setQuantidadeSelecionada(2);  // Quantidade selecionada do item
+        cartItem.setQuantidadeSelecionada(2); // Quantidade selecionada do item
 
         // Salvar o CartItem
         cartItemRepository.save(cartItem);

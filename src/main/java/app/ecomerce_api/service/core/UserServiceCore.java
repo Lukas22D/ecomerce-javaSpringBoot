@@ -2,6 +2,7 @@ package app.ecomerce_api.service.core;
 
 import app.ecomerce_api.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import app.ecomerce_api.controller.dto_controller.UserCreateDto;
 import app.ecomerce_api.handler.custom.UserAlreadyExistsException;
 import app.ecomerce_api.model.User;
 import app.ecomerce_api.repository.UserRepository;
@@ -16,11 +17,14 @@ public class UserServiceCore implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User saveUser(User user) {
-        if (userRepository.findByLogin(user.getLogin()) != null) {
-            throw new UserAlreadyExistsException("User already exists");
-        }
-        return userRepository.save(user);
+    public User saveUser(UserCreateDto userRequest) {
+        return (User) userRepository.findByLogin(userRequest.login()).map(user -> {
+            throw new UserAlreadyExistsException("User exist");
+        }).orElseGet(() -> {
+            User user = new User(userRequest.name(), userRequest.login(), userRequest.password());
+            userRepository.save(user);
+            return user;
+        });
     }
 
     @Override

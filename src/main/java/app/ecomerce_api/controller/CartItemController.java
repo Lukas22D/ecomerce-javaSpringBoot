@@ -6,8 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
+import app.ecomerce_api.config.View;
 import app.ecomerce_api.controller.dto_controller.Response200;
 import app.ecomerce_api.dto_global.CartItemRequest;
 import app.ecomerce_api.service.CartItemService;
@@ -20,6 +24,7 @@ public class CartItemController {
     private CartItemService cartItemService;
         
     @PostMapping("/add")
+    @JsonView({View.CartView.class})
     public ResponseEntity<Response200> addItemToCart(@RequestBody CartItemRequest reqItemCart) {
         var cart = cartItemService.addItemToCart(reqItemCart);
         return new ResponseEntity<>(new Response200().setResponse200("Item added to cart", 200, cart), HttpStatus.OK);

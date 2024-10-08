@@ -9,5 +9,8 @@ public interface CartService {
     public Cart getCartById(Long id);
 
     public List<Cart> getAllCarts(); 
+
+    public Cart saveCart(Cart cart);
+
     
 }
