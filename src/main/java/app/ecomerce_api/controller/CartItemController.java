@@ -1,5 +1,9 @@
 package app.ecomerce_api.controller;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +26,15 @@ public class CartItemController {
 
     @Autowired
     private CartItemService cartItemService;
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(4);
         
     @PostMapping("/add")
     @JsonView({View.CartView.class})
-    public ResponseEntity<Response200> addItemToCart(@RequestBody CartItemRequest reqItemCart) {
-        var cart = cartItemService.addItemToCart(reqItemCart);
-        return new ResponseEntity<>(new Response200().setResponse200("Item added to cart", 200, cart), HttpStatus.OK);
+    public CompletableFuture<ResponseEntity<Response200>> addItemToCart(@RequestBody CartItemRequest reqItemCart) {
+        return CompletableFuture.supplyAsync(() -> {
+            cartItemService.addItemToCart(reqItemCart);
+            return ResponseEntity.ok().body(new Response200().setResponse200("Item added to cart", HttpStatus.OK.value(), "Cart updated"));
+        }, executorService);
     }
-    
 }

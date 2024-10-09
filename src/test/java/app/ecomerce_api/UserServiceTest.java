@@ -13,7 +13,6 @@ import app.ecomerce_api.repository.CartItemRepository;
 import app.ecomerce_api.repository.ItemRepository;
 import app.ecomerce_api.repository.UserRepository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.hibernate.Hibernate;
