@@ -36,6 +36,10 @@ public class User implements Serializable {
     @JsonIgnore
     private String password;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_data_id")
+    private PaymentData paymentData;
+
     // Relacionamento OneToOne com Cart
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shopping_cart_id", referencedColumnName = "cart_id")
@@ -46,6 +50,7 @@ public class User implements Serializable {
         this.login = login;
         this.password = password;
         this.shoppingCart = new Cart();
+        this.paymentData = new PaymentData();
     }
 
     public User() {

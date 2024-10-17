@@ -54,7 +54,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
     volumes:
-      - kafka_data:/var/lib/kafka/data
+      - kafka_data:/var/lib/
     networks:
       - app-network
     restart: always

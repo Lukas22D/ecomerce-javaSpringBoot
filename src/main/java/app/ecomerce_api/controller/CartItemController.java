@@ -16,8 +16,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import app.ecomerce_api.config.View;
+import app.ecomerce_api.controller.dto_controller.CartItemRequest;
 import app.ecomerce_api.controller.dto_controller.Response200;
-import app.ecomerce_api.dto_global.CartItemRequest;
 import app.ecomerce_api.service.CartItemService;
 
 @RestController
