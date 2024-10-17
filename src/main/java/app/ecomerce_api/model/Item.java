@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 
 @Entity(name = "item_produto")
@@ -31,6 +33,21 @@ public class Item implements Serializable{
 
     @JsonView({View.ItemView.class})
     private Integer quantidadeDisponivel;
+
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    public Item(String nome, String descricao, Double preco, Integer quantidadeDisponivel, Customer customer) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.quantidadeDisponivel = quantidadeDisponivel;
+        this.customer = customer;
+    }
+
+    public Item() {
+    }
 
 
    

@@ -1,11 +1,13 @@
 package app.ecomerce_api.service;
 
+import app.ecomerce_api.controller.dto_controller.CreateItemRequest;
 import app.ecomerce_api.model.Item;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface ItemService {
 
-    public Item saveItem(Item item);
+    public CompletableFuture<Item> saveItem(CreateItemRequest item);
 
     public List<Item> getAllItems();
 

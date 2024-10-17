@@ -1,25 +1,34 @@
 package app.ecomerce_api.service.core;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import app.ecomerce_api.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import app.ecomerce_api.repository.ItemRepository;
+import app.ecomerce_api.controller.dto_controller.CreateItemRequest;
 import app.ecomerce_api.model.Item;
+import app.ecomerce_api.service.CustomerService;
 
 @Service
+@AllArgsConstructor
 public class ItemServiceCore implements ItemService {
     
-    @Autowired
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
+
+    private final CustomerService customerService;
 
     @Override
-    public Item saveItem(Item item) {
-        return itemRepository.save(item);
+    public CompletableFuture<Item> saveItem(CreateItemRequest request) {
+        var customer = customerService.findCustomerById(request.customerId());
+
+        Item item = new Item(request.name(), request.description(), request.price(), request.quantity(), customer);
+        itemRepository.save(item);
+        return CompletableFuture.completedFuture(item);
     }
 
     @Cacheable(value = "item", key = "#id")

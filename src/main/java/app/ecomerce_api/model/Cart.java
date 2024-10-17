@@ -44,6 +44,7 @@ public class Cart implements Serializable {
 
     public void addItem(CartItem cartItem) {
         this.cartItems.add(cartItem);
+        cartItem.setCart(this);
         this.total += cartItem.getItem().getPreco() * cartItem.getQuantidadeSelecionada();
     }
 

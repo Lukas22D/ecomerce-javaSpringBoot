@@ -7,5 +7,5 @@ import app.ecomerce_api.model.Cart;
 
 public interface CartItemService {
     
-    public CompletableFuture<Cart> addItemToCart(CartItemRequest cartItemRequest);
+    public CompletableFuture<Cart> addItemToCart(CartItemRequest cartItemRequest) ;
 }
