@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,13 +14,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PaymentData {
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @OneToOne(mappedBy = "paymentData")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     private String paymentMethod;
@@ -32,7 +34,7 @@ public class PaymentData {
 
     private String securityCode;
 
-    public PaymentData(String paymentMethod, String cardNumber, String cardHolder, String expirationDate, String securityCode) {
+    public Card(String paymentMethod, String cardNumber, String cardHolder, String expirationDate, String securityCode) {
         this.paymentMethod = paymentMethod;
         this.cardNumber = cardNumber;
         this.cardHolder = cardHolder;

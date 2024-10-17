@@ -2,6 +2,9 @@ package app.ecomerce_api.model;
 
 import java.io.Serializable;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -14,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 
 @Entity(name = "users")
@@ -36,9 +40,8 @@ public class User implements Serializable {
     @JsonIgnore
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_data_id")
-    private PaymentData paymentData;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> paymentData = new ArrayList<>();
 
     // Relacionamento OneToOne com Cart
     @OneToOne(cascade = CascadeType.ALL)
@@ -50,16 +53,20 @@ public class User implements Serializable {
         this.login = login;
         this.password = password;
         this.shoppingCart = new Cart();
-        this.paymentData = new PaymentData();
+        this.paymentData = new ArrayList<>();
     }
 
     public User() {
-        this.shoppingCart = new Cart();
     }
 
     @PrePersist
     public void prePersist() {
         this.shoppingCart.setUser(this);
+    }
+
+    public void addCard(Card card) {
+        this.paymentData.add(card);
+        card.setUser(this);
     }
 
     public Cart getShoppingCart() {
